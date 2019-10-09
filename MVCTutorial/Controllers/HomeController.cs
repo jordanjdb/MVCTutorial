@@ -14,6 +14,22 @@ namespace MVCTutorial.Controllers
             return View();
         }
 
+		public ActionResult AlbumTitleSearch(string q)
+        {
+            MusicStoreDB db = new MusicStoreDB();
+            var albums = db.Albums.Where(a => a.Title.Contains(q)).ToList();
+
+            return View(albums);
+
+        }
+		public ActionResult ArtistSearch(string q) {
+			MusicStoreDB db = new MusicStoreDB();
+			var artists = db.Artists.Where(a => a.Name.Contains(q)).ToList();
+
+			return PartialView("_ArtistSearch",artists);
+
+		}
+
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
@@ -27,13 +43,6 @@ namespace MVCTutorial.Controllers
 
             return View();
         }
-        public ActionResult Search(string q)
-        {
-            MusicStoreDB db = new MusicStoreDB();
-            var albums = db.Albums.Where(a => a.Title.Contains(q));
-
-            return View(albums);
-
-        }
-    }
+        
+	}
 }

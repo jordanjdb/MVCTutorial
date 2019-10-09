@@ -13,7 +13,7 @@
         <h2>Search</h2>
         <p>Search for albums by name.</p>
 
-        @using (Html.BeginForm("Search", "Home", FormMethod.Get,
+        @using (Html.BeginForm("AlbumTitleSearch", "Home", FormMethod.Get,
             new { target = "_self", @class = "editForm" }))
         {
             @Html.TextBox("q");
@@ -33,3 +33,27 @@
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
 </div>
+<div class="panel panel-default">
+    <div class="panel-body">
+        @using (Ajax.BeginForm("ArtistSearch", "Home",
+            new AjaxOptions {
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "GET",
+                OnFailure = "searchFailed",
+                LoadingElementId = "ajax-loader",
+                UpdateTargetId = "searchresults"
+            }))
+         {
+            <input type="text" name="q" />
+            <input type="submit" value="Search"/>
+            <img id="ajax-loader"
+                 src="@Url.Content("~/Images/ajax-loader.gif")"
+                 style="display:none" />
+         }
+        <div id="searchresults"></div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/App/MVCTutorial.js"></script>
+}

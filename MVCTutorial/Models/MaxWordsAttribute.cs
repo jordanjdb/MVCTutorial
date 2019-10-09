@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace MVCTutorial.Models
 {
-    public class MaxWordsAttribute : ValidationAttribute
+    public class MaxWordsAttribute : ValidationAttribute,
+									 IClientValidatable
     {
         private readonly int _maxWords;
         public MaxWordsAttribute(int maxWords)
@@ -14,8 +16,19 @@ namespace MVCTutorial.Models
         {
             _maxWords = maxWords;
         }
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
+
+		public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context) {
+
+			var rule = new ModelClientValidationRule {
+				ErrorMessage = FormatErrorMessage(metadata.GetDisplayName()),
+				ValidationType = "maxwords"
+			};
+			rule.ValidationParameters.Add("wordcount", _maxWords);
+			
+			yield return rule;
+		}
+
+		protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
             if (value != null)
             {
                 if (value.ToString().Where(chr => chr.ToString() == " ").Count() + 1 > _maxWords)

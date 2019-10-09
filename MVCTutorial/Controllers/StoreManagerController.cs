@@ -20,6 +20,15 @@ namespace MVCTutorial.Controllers
             var albums = db.Albums.Include(a => a.Artist).Include(a => a.Genre);
             return View(albums.ToList());
         }
+		
+		public ActionResult DailyDeal() {
+			var album = db.Albums.First();
+
+			album.Price *= 0.5m;
+
+			return PartialView("_DailyDeal", album);
+
+		}
 
         // GET: StoreManager/Details/5
         public ActionResult Details(int? id)

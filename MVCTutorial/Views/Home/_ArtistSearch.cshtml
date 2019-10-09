@@ -1,0 +1,11 @@
+﻿@model IEnumerable<MVCTutorial.Models.Artist>
+
+@foreach (var item in Model) {
+    <ul>
+        <li>
+            @Html.DisplayFor(modelItem => item.Name)
+        </li>
+    </ul>
+}
+
+
